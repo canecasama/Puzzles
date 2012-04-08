@@ -59,7 +59,7 @@ def calc_probability(m, n, p, x):
 
 
 def ticket_lottery(lottery_str):
-    """Calculate the minimum valid date.
+    """Calculate the probability that all the your group can get tickets.
 
     Args:
     lottery_str -- string containing m total number of people,
