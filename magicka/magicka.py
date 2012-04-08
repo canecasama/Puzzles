@@ -77,7 +77,9 @@ def parse_input():
     number of elements to invoke followed by `N`-char elements
 
     Returns:
-    array of 2-tuples like: [(`N`, `RP`), ...]
+    array of 3-tuples like: [({dict with combine elements},
+                              'regexp with opposed elements',
+                              [list with elements to invoke]), ...]
     
     """
     T = int(stdin.readline().strip())
