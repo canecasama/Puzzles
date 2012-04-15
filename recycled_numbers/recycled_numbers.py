@@ -41,37 +41,33 @@ def calculate(A, B):
 
     """
     count = 0
-    # Calculate just once the multiplier which is a 
-    #  1 follow by len(NUMBER) - 1 zeros
-    default_multiplier = 10 ** int(log10(A))
+    length = int(log10(A)) + 1
+    # List with all divisors and multipliers necessary for this run
+    split = [10 ** idx for idx in xrange(1, length)]
 
     for num in xrange(A, B + 1):
         # A set with the possible recycled numbers
         possible = set()
-        # Set start of divisor and multiplier
-        divisor = 10
-        multiplier = default_multiplier
 
-        # Look until the divisor is bigger than the current number
-        while divisor <= num:
+        for idx in xrange(1, length):
+            # Set divisor and multiplier from the split list
+            divisor = split[idx-1]
+            multiplier = split[-idx]
+
             # Get left and right part of the number
             left = num / divisor
             right = num % divisor
             # Get the new recycled number switching left by right and
-            # multiplying the right by a multiple of 10 to add the
-            # right amount of tailing zeros
+            #  multiplying the right by a multiple of 10 to add the
+            #  right amount of tailing zeros
             new = right * multiplier + left
 
             # The new number need to be between the current number and `B`
-            # because smaller numbers were already matched with their
-            # recycled numbers. The new number cannot be equal to the
-            # current number.
+            #  because smaller numbers were already matched with their
+            #  recycled numbers. The new number cannot be equal to the
+            #  current number.
             if num < new <= B:
                 possible.add(new)
-
-            # Increase divisor and decreade multiplier
-            divisor *= 10
-            multiplier /= 10
 
         # Count how many numbers where matched
         count += len(possible)
