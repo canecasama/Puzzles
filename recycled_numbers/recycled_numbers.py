@@ -36,40 +36,42 @@ def calculate(A, B):
     287
     >>> calculate(1000000, 2000000)
     299997
+    >>> calculate(100000, 200000)
+    24930
 
     """
-    # Faster implementation of length for numbers
-    #  same result as len(str(NUMBER))
-    def num_length(number):
-        if number == 0:
-            return 1
-        return int(log10(number)) + 1
-
     count = 0
+    # Calculate just once the multiplier which is a 
+    #  1 follow by len(NUMBER) - 1 zeros
+    default_multiplier = 10 ** int(log10(A))
 
     for num in xrange(A, B + 1):
-        # Get lenght of the number
-        length = num_length(num)
         # A set with the possible recycled numbers
         possible = set()
+        # Set start of divisor and multiplier
+        divisor = 10
+        multiplier = default_multiplier
 
-        for idx in xrange(length):
-            # Get the divisor multiple of 10 to cut the number in 2 parts
-            divisor = 10 ** idx
+        # Look until the divisor is bigger than the current number
+        while divisor <= num:
             # Get left and right part of the number
             left = num / divisor
             right = num % divisor
             # Get the new recycled number switching left by right and
-            #  multiplying the right by a multiple of 10 to add the
-            #  right amount of tailing zeros
-            new = right * (10 ** num_length(left)) + left
+            # multiplying the right by a multiple of 10 to add the
+            # right amount of tailing zeros
+            new = right * multiplier + left
 
             # The new number need to be between the current number and `B`
-            #  because smaller numbers were already matched with their
-            #  recycled numbers. The new number cannot be equal to the
-            #  current number.
+            # because smaller numbers were already matched with their
+            # recycled numbers. The new number cannot be equal to the
+            # current number.
             if num < new <= B:
                 possible.add(new)
+
+            # Increase divisor and decreade multiplier
+            divisor *= 10
+            multiplier /= 10
 
         # Count how many numbers where matched
         count += len(possible)
