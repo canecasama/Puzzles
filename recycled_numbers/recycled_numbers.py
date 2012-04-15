@@ -8,6 +8,7 @@ Date: April 14th, 2012
 
 """
 from sys import stdin
+from math import log10
 
 
 def calculate(A, B):
@@ -37,27 +38,37 @@ def calculate(A, B):
     299997
 
     """
+    # Faster implementation of length for numbers
+    #  same result as len(str(NUMBER))
+    def num_length(number):
+        if number == 0:
+            return 1
+        return int(log10(number)) + 1
+
     count = 0
 
     for num in xrange(A, B + 1):
         # Get lenght of the number
-        length = len(str(num))
-        # Get a string with is the number twice one in front of the other
-        #  so you can iterate over it geting all recycled options
-        string = str(num) * 2
+        length = num_length(num)
         # A set with the possible recycled numbers
         possible = set()
 
         for idx in xrange(length):
-            # Get the new recycled number
-            new = string[idx:length + idx]
-            # If the first digit of the number is zero, it means it is not
-            #  valid. If the new number is the same as the current number
-            #  it is also not valid.
+            # Get the divisor multiple of 10 to cut the number in 2 parts
+            divisor = 10 ** idx
+            # Get left and right part of the number
+            left = num / divisor
+            right = num % divisor
+            # Get the new recycled number switching left by right and
+            #  multiplying the right by a multiple of 10 to add the
+            #  right amount of tailing zeros
+            new = right * (10 ** num_length(left)) + left
+
             # The new number need to be between the current number and `B`
             #  because smaller numbers were already matched with their
-            #  recycled numbers.
-            if new[0] != '0' and new != str(num) and num <= int(new) <= B:
+            #  recycled numbers. The new number cannot be equal to the
+            #  current number.
+            if num < new <= B:
                 possible.add(new)
 
         # Count how many numbers where matched
