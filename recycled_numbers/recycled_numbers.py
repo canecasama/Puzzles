@@ -44,14 +44,15 @@ def calculate(A, B):
     length = int(log10(A)) + 1
     # List with all divisors and multipliers necessary for this run
     split = [10 ** idx for idx in xrange(1, length)]
+    range_length = range(1, length)
 
     for num in xrange(A, B + 1):
         # A set with the possible recycled numbers
         possible = set()
 
-        for idx in xrange(1, length):
+        for idx in range_length:
             # Set divisor and multiplier from the split list
-            divisor = split[idx-1]
+            divisor = split[idx - 1]
             multiplier = split[-idx]
 
             # Get left and right part of the number
